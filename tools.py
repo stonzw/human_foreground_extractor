@@ -57,4 +57,6 @@ class ForeGroundExtractor:
     def detect_foreground(self, image):
         output = self.mrcnn([self.trans(Image.fromarray(image))])
         grabcut_input = self.mrcnn_output2grabcut_input(output)
+        if not (grabcut_input == cv2.GC_FGD).any():
+            return np.zeros(image.shape[:2]).astype(np.uint8)
         return create_grabcut_mask(image, grabcut_input)
